@@ -24,8 +24,8 @@ console.log("Workouts of user 2\n",getAllWorkoutsOf('2'));
 console.log(getAllWorkoutsByType('2', 'running'));
 console.log(getAllWorkoutsByType('2', 'cycling'));
 
-console.log(getAllWorkoutsOf('3  '));
-console.log(getAllWorkoutsByType('3  ', 'running'));
+console.log("Workouts of user with ID 3\n",getAllWorkoutsOf('3  '));
+console.log(getAllWorkoutsByType('3 ','running'));
 
 updateUser('1', { name: 'Alice Smith', age: 31, weight: 61, height: 161 });
-console.log(getUser('1'));
+console.log("Updated User with id 1\n",getUser('1'));
