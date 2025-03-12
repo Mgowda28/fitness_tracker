@@ -51,7 +51,7 @@ export class FitnessTracker {
     getUsers(): User[] {
         return this.users;
     }
-
+ 
     getUser(id: string): User | undefined {
         return this.users.find(user => user.id === id);
     }
