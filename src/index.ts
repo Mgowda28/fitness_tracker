@@ -1,31 +1,139 @@
-import {addUser as importedAddUser, logWorkout, getAllWorkoutsOf, getAllWorkoutsByType, getUsers, getUser, updateUser, addUser} from './fitness';
+import {addUser as importedAddUser, logWorkout, getAllWorkoutsOf, getAllWorkoutsByType, getUsers, getUser, updateUser} from './fitness';
+import * as readline from 'readline';
 
 
-addUser('1', 'Alice', 30, 60, 160);
-addUser('2', 'Bob Brown', 25, 70, 170);     
-addUser('3  ', 'Charlie Day', 35, 80, 180);
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
 
-logWorkout('1', { type: 'running',  duration: 30  , caloriesBurned: 300, date: '2020-01-01' });
-logWorkout('1', { type: 'cycling',  duration: 60  , caloriesBurned: 500, date: '2020-01-02' });
+const menu = `
+Choose an option:
+1. Add User
+2. Log Workout
+3. Get All Workouts Of User
+4. Get All Workouts By Type
+5. Get All Users
+6. Get User
+7. Update User
+8. Exit
+`;
 
-logWorkout('2', { type: 'running',  duration: 40  , caloriesBurned: 400, date: '2020-01-01' });
-logWorkout('2', { type: 'cycling',  duration: 70  , caloriesBurned: 600, date: '2020-01-02' });
+function showMenu() {
+    console.log(menu);
+    rl.question('Enter your choice: ', (c)=> handleMenu(c));
+}
 
-logWorkout('3  ', { type: 'running',  duration: 50  , caloriesBurned: 500, date: '2020-01-01' });
-logWorkout('3  ', { type: 'cycling',  duration: 80  , caloriesBurned: 800, date: '2020-01-02' });
+function addUser(){
+    rl.question('Enter user ID: ', (id)=> {
+        rl.question('Enter user name: ', (name)=> {
+            rl.question('Enter user age: ', (age)=> {
+                rl.question('Enter user weight: ', (weight)=> {
+                    rl.question('Enter user height: ', (height)=> {
+                            importedAddUser(id, name, parseInt(age), parseInt(weight), parseInt(height));
+                            console.log('User added successfully.');
+                        showMenu();
+                    });
+                });
+            });
+        });
+    });
+}
 
-console.log("All users\n",getUsers());
-console.log("User with id :1\n",getUser('1'));  
+function LogWorkout(){
+    rl.question('Enter user ID: ', (id)=> {
+        rl.question('Enter workout type: ', (type)=> {
+            rl.question('Enter workout start time: ', (duration)=> {
+                rl.question('Enter workout end time: ', (caloriesBurned)=> {
+                    rl.question('Enter workout comment: ', (date)=> {
+                        logWorkout(id, {type, duration: parseInt(duration), caloriesBurned: parseInt(caloriesBurned), date});
+                        console.log('Workout logged successfully.');
+                        showMenu();
+                    });
+                });
+            });
+        });
+    });
+}
 
-console.log("Workouts of user with ID 1\n",getAllWorkoutsOf('1'));
-console.log("Workout Types of User With id 1\n",getAllWorkoutsByType('1', 'running'));
+function getAllWorkoutsOfUser(){
+    rl.question('Enter user ID: ', (id)=> {
+        const workouts = getAllWorkoutsOf(id);
+        console.log(workouts);
+        showMenu();
+    });
+}
 
-console.log("Workouts of user 2\n",getAllWorkoutsOf('2'));
-console.log(getAllWorkoutsByType('2', 'running'));
-console.log(getAllWorkoutsByType('2', 'cycling'));
+function getAllWorkoutsByTypeMenu(){
+    rl.question('Enter user ID: ', (id)=> {
+        rl.question('Enter workout type: ', (type)=> {
+            const workouts = getAllWorkoutsByType(id, type);
+            console.log(workouts);
+            showMenu();
+        });
+    });
+}
 
-console.log("Workouts of user with ID 3\n",getAllWorkoutsOf('3  '));
-console.log(getAllWorkoutsByType('3 ','running'));
+function getAllUsers(){
+    const users = getUsers();
+    console.log(users);
+    showMenu();
+}
 
-updateUser('1', { name: 'Alice Smith', age: 31, weight: 61, height: 161 });
-console.log("Updated User with id 1\n",getUser('1'));
+function getUserMenu(){
+    rl.question('Enter user ID: ', (id)=> {
+        const user = getUser(id);
+        console.log(user);
+        showMenu();
+    });
+}
+
+function updateUserMenu(){
+    rl.question('Enter user ID: ', (id)=> {
+        rl.question('Enter user name: ', (name)=> {
+            rl.question('Enter user age: ', (age)=> {
+                rl.question('Enter user weight: ', (weight)=> {
+                    rl.question('Enter user height: ', (height)=> {
+                        updateUser(id, { name, age: parseInt(age), weight: parseInt(weight), height: parseInt(height) });
+                        console.log('User updated successfully.');
+                        showMenu();
+                    });
+                });
+            });
+        });
+    });
+}
+
+function handleMenu(choice: string){
+    switch(choice){
+        case '1':
+            addUser();
+            break;
+        case '2':
+            LogWorkout();
+            break;
+        case '3':
+            getAllWorkoutsOfUser();
+            break;
+        case '4':
+            getAllWorkoutsByTypeMenu();
+            break;
+        case '5':
+            getAllUsers();
+            break;
+        case '6':
+            getUserMenu();
+            break;
+        case '7':
+            updateUserMenu();
+            break;
+        case '8':
+            rl.close();
+            break;
+        default:
+            console.log('Invalid choice.');
+            showMenu();
+    }
+}
+
+showMenu();
